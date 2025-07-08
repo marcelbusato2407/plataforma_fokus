@@ -16,7 +16,7 @@ const audioPlay = new Audio('/sons/play.wav');
 const audioPause = new Audio('/sons/pause.mp3');
 const audioZerou = new Audio('/sons/beep.mp3');
 
-let tempoDecorridoEmSegundos = 1500;
+let tempoDecorridoEmSegundos = 5;
 let intervaloId = null;
 
 musica.loop = true;
@@ -29,7 +29,7 @@ botaoMusica.addEventListener('change', () => {
 })
 
 botaoFoco.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 1500;
+    tempoDecorridoEmSegundos = 5;
     alterarContexto('foco');
     botaoFoco.classList.add('active');
     zerar();
@@ -39,7 +39,7 @@ botaoFoco.addEventListener('click', () => {
 })
 
 botaoCurto.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 300;
+    tempoDecorridoEmSegundos = 5;
     alterarContexto('descanso-curto');
     botaoCurto.classList.add('active');
     zerar();
@@ -49,7 +49,7 @@ botaoCurto.addEventListener('click', () => {
 });
 
 botaoLongo.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 900;
+    tempoDecorridoEmSegundos = 15;
     alterarContexto('descanso-longo');
     botaoLongo.classList.add('active');
     zerar();
@@ -92,8 +92,13 @@ function alterarContexto(contexto) {
 
 const contagemRegressiva = () => {
     if(tempoDecorridoEmSegundos <= 0) {
-        audioZerou.play();
+        //audioZerou.play();
         alert('Tempo estourado');
+        const focoAtivo = html.getAttribute("data-contexto") == "foco";
+        if(focoAtivo) {
+            const evento = new CustomEvent("FocoFinalizado");
+            document.dispatchEvent(evento);
+        }
         zerar();
         return;
     }
